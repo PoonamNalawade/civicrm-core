@@ -1,9 +1,9 @@
 <?php
 /**
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -46,7 +46,7 @@ class api_v3_RelationshipTest extends CiviUnitTestCase {
   protected $_customGroupId = NULL;
   protected $_customFieldId = NULL;
   protected $_params;
-  public $_eNoticeCompliant = TRUE;
+
   protected $_entity;
   function get_info() {
     return array(

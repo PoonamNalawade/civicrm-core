@@ -1,8 +1,8 @@
 {*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -39,8 +39,9 @@
       <div class="form-item">
         {strip}
         {* handle enable/disable actions*}
-         {include file="CRM/common/enableDisable.tpl"}
-        <table class="selector">
+         {include file="CRM/common/enableDisableApi.tpl"}
+         {include file="CRM/common/crmeditable.tpl"}
+        <table class="selector row-highlight">
           <tr class="columnheader">
             <th>{ts}Label{/ts}</th>
             <th>{ts}Value{/ts}</th>
@@ -76,6 +77,3 @@
         </div>
     {/if}
 {/if}
-
-{include file="CRM/common/crmeditable.tpl"}
-

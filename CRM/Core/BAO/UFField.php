@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -143,7 +143,7 @@ class CRM_Core_BAO_UFField extends CRM_Core_DAO_UFField {
     $ufField->location_type_id = (CRM_Utils_Array::value(2, $params['field_name'])) ? $params['field_name'][2] : 'NULL';
     $ufField->phone_type_id = CRM_Utils_Array::value(3, $params['field_name']);
 
-    if (CRM_Utils_Array::value('uf_field', $ids)) {
+    if (!empty($ids['uf_field'])) {
       $ufField->whereAdd("id <> " . CRM_Utils_Array::value('uf_field', $ids));
     }
 
@@ -252,7 +252,7 @@ WHERE cf.id IN (" . $customFieldIds . ") AND is_multiple = 1 LIMIT 0,1";
     // fix for CRM-316
     $oldWeight = NULL;
 
-    if (CRM_Utils_Array::value('field_id', $params)) {
+    if (!empty($params['field_id'])) {
       $oldWeight = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_UFField', $params['field_id'], 'weight', 'id');
     }
     $fieldValues = array('uf_group_id' => $params['group_id']);
@@ -788,13 +788,15 @@ SELECT  id
    * http://issues.civicrm.org/jira/browse/CRM-5869
    *
    * @param string $key Field key - e.g. street_address-Primary, first_name
-   * @param $profileAddressFields
-   * @params array $profileAddressFields array of profile fields that relate to address fields
+   * @param array $profileAddressFields array of profile fields that relate to address fields
+   * @param array $profileFilter filter to apply to profile fields - expected usage is to only fill based on
+   * the bottom profile per CRM-13726
    */
-  static function assignAddressField($key, &$profileAddressFields) {
+  static function assignAddressField($key, &$profileAddressFields, $profileFilter) {
     $billing_id = CRM_Core_BAO_LocationType::getBilling();
     list($prefixName, $index) = CRM_Utils_System::explode('-', $key, 2);
 
+    $profileFields = civicrm_api3('uf_field', 'get', array_merge($profileFilter, array('is_active' => 1, 'return' => 'field_name')));
     //check for valid fields ( fields that are present in billing block )
     $validBillingFields = array(
       'first_name',
@@ -807,8 +809,15 @@ SELECT  id
       'postal_code',
       'country'
     );
+    $validProfileFields = array();
 
-    if (!in_array($prefixName, $validBillingFields)) {
+    foreach ($profileFields['values'] as $field) {
+      if(in_array($field['field_name'], $validBillingFields)) {
+        $validProfileFields[] = $field['field_name'];
+      }
+    }
+
+    if (!in_array($prefixName, $validProfileFields) ) {
       return;
     }
 
@@ -957,6 +966,24 @@ SELECT  id
       else {
         $fields['Membership'] = $membershipFields;
       }
+    }
+
+    if (CRM_Core_Permission::access('CiviCase')) {
+      $caseFields = CRM_Case_BAO_Query::getFields(TRUE);
+      $caseFields = array_merge($caseFields, CRM_Core_BAO_CustomField::getFieldsForImport('Case'));
+      if ($caseFields) {
+        // Remove fields not supported by profiles
+        CRM_Utils_Array::remove($caseFields,
+          'case_id',
+          'case_type',
+          'case_start_date',
+          'case_end_date',
+          'case_role',
+          'case_status',
+          'case_deleted'
+        );
+      }
+      $fields['Case'] = $caseFields;
     }
 
     $activityFields = CRM_Activity_BAO_Activity::getProfileFields();

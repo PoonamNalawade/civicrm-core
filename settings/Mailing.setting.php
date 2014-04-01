@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -149,5 +149,19 @@ return array(
     'is_contact' => 0,
     'description' => 'Don\'t check for presence of mandatory tokens (domain address; unsubscribe/opt-out) before sending mailings. WARNING: Mandatory tokens are a safe-guard which facilitate compliance with the US CAN-SPAM Act. They should only be disabled if your organization adopts other mechanisms for compliance or if your organization is not subject to CAN-SPAM.',
     'help_text' => null,
+  ), 
+  'dedupe_email_default' => array(
+    'group_name' => 'Mailing Preferences',
+    'group' => 'mailing',
+    'name' => 'dedupe_email_default',
+    'type' => 'Integer',
+    'html_type' => 'checkbox',
+    'default' => 1,
+    'add' => '4.5',
+    'title' => 'CiviMail dedupes e-mail addresses by default',
+    'is_domain' => 1,
+    'is_contact' => 0,
+    'description' => 'Set the "dedupe e-mail" option when sending a new mailing to "true" by default.',
+    'help_text' => null,
   ),
-  );
+);

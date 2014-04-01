@@ -2,9 +2,9 @@
 
 /*
  +--------------------------------------------------------------------+
-| CiviCRM version 4.4                                                |
+| CiviCRM version 4.5                                                |
 +--------------------------------------------------------------------+
-| Copyright CiviCRM LLC (c) 2004-2013                                |
+| Copyright CiviCRM LLC (c) 2004-2014                                |
 +--------------------------------------------------------------------+
 | This file is a part of CiviCRM.                                    |
 |                                                                    |
@@ -28,9 +28,9 @@
 
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -63,7 +63,7 @@ class api_v3_SystemTest extends CiviUnitTestCase {
 
   const TEST_CACHE_GROUP = 'SystemTest';
   const TEST_CACHE_PATH = 'api/v3/system';
-  public $_eNoticeCompliant = TRUE;
+
   /**
    *  Constructor
    *

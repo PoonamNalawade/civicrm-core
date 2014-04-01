@@ -2,9 +2,9 @@
 
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -32,7 +32,7 @@ class api_v3_EventTest extends CiviUnitTestCase {
   protected $_params;
   protected $_apiversion;
   protected $_entity;
-  public $_eNoticeCompliant = TRUE;
+
   function get_info() {
     return array(
       'name' => 'Event Create',

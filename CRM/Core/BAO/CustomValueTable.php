@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -91,7 +91,7 @@ class CRM_Core_BAO_CustomValueTable {
                   CRM_Utils_Array::lookupValue($states, 'state_province',
                     CRM_Core_PseudoConstant::stateProvince(), TRUE
                   );
-                  if (!CRM_Utils_Array::value('state_province_id', $states)) {
+                  if (empty($states['state_province_id'])) {
                     CRM_Utils_Array::lookupValue($states, 'state_province',
                       CRM_Core_PseudoConstant::stateProvinceAbbreviation(), TRUE
                     );
@@ -128,7 +128,7 @@ class CRM_Core_BAO_CustomValueTable {
                   CRM_Utils_Array::lookupValue($countries, 'country',
                     CRM_Core_PseudoConstant::country(), TRUE
                   );
-                  if (!CRM_Utils_Array::value('country_id', $countries)) {
+                  if (empty($countries['country_id'])) {
                     CRM_Utils_Array::lookupValue($countries, 'country',
                       CRM_Core_PseudoConstant::countryIsoCode(), TRUE
                     );
@@ -320,7 +320,7 @@ class CRM_Core_BAO_CustomValueTable {
           $cvParam['type'] = 'Timestamp';
         }
 
-        if (CRM_Utils_Array::value('id', $customValue)) {
+        if (!empty($customValue['id'])) {
           $cvParam['id'] = $customValue['id'];
         }
         if (!array_key_exists($customValue['table_name'], $cvParams)) {

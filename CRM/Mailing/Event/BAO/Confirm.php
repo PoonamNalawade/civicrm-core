@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -86,10 +86,11 @@ class CRM_Mailing_Event_BAO_Confirm extends CRM_Mailing_Event_DAO_Confirm {
     $ce->time_stamp = date('YmdHis');
     $ce->save();
 
-    CRM_Contact_BAO_GroupContact::updateGroupMembershipStatus(
-      $contact_id,
+    CRM_Contact_BAO_GroupContact::addContactsToGroup(
+      array($contact_id),
       $se->group_id,
       'Email',
+      'Added',
       $ce->id
     );
 

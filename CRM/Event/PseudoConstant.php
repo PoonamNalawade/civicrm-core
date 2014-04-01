@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -97,10 +97,10 @@ class CRM_Event_PseudoConstant extends CRM_Core_PseudoConstant {
    *
    * @access public
    *
-   * @return array - array reference of all events if any
+   * @return array - array of all events if any
    * @static
    */
-  public static function &event($id = NULL, $all = FALSE, $condition = NULL) {
+  public static function event($id = NULL, $all = FALSE, $condition = NULL) {
     $key = "{$id}_{$all}_{$condition}";
 
     if (!isset(self::$event[$key])) {

@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -117,27 +117,37 @@ class CRM_Mailing_Page_View extends CRM_Core_Page {
     if (isset($this->_contactID)) {
       //get details of contact with token value including Custom Field Token Values.CRM-3734
       $returnProperties = $this->_mailing->getReturnProperties();
-      $params           = array('contact_id' => $this->_contactID);
-      $details          = CRM_Utils_Token::getTokenDetails($params,
+      $params = array('contact_id' => $this->_contactID);
+      $details = CRM_Utils_Token::getTokenDetails($params,
+        $returnProperties,
+        FALSE, TRUE, NULL,
+        $this->_mailing->getFlattenedTokens(),
+        get_class($this)
+      );
+      $details = $details[0][$this->_contactID];
+      $contactId = $this->_contactID;
+    }
+    else {
+      //get tokens that are not contact specific resolved
+      $params  = array('contact_id' => 0);
+      $details = CRM_Utils_Token::getAnonymousTokenDetails($params,
         $returnProperties,
         TRUE, TRUE, NULL,
         $this->_mailing->getFlattenedTokens(),
         get_class($this)
       );
-      $details = $details[0][$this->_contactID];
+
+      $details = $details[0][0];
+      $contactId = 0;
     }
-    else {
-      $details = array('test');
-    }
-    $mime = &$this->_mailing->compose(NULL, NULL, NULL, 0,
+    $mime = &$this->_mailing->compose(NULL, NULL, NULL, $contactId,
       $this->_mailing->from_email,
       $this->_mailing->from_email,
       TRUE, $details, $attachments
     );
 
     $title = NULL;
-    if (isset($this->_mailing->body_html)) {
-      
+    if (isset($this->_mailing->body_html) && empty($_GET['text'])) {
       $header = 'Content-Type: text/html; charset=utf-8';
       $content = $mime->getHTMLBody();
       if (strpos($content, '<head>') === FALSE && strpos($content, '<title>') === FALSE) {
@@ -148,7 +158,11 @@ class CRM_Mailing_Page_View extends CRM_Core_Page {
       $header = 'Content-Type: text/plain; charset=utf-8';
       $content = $mime->getTXTBody();
     }
+    CRM_Utils_System::setTitle($this->_mailing->subject);
 
+    if (CRM_Utils_Array::value('snippet', $_GET) === 'json') {
+      CRM_Core_Page_AJAX::returnJsonResponse($content);
+    }
     if ($print) {
       header($header);
       print $title;

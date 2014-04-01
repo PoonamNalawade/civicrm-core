@@ -15,6 +15,8 @@ class CRM_Core_CodeGen_Util_Template {
   function __construct($filetype) {
     $this->compileDir = CRM_Core_CodeGen_Util_File::createTempDir('templates_c_');
 
+    $this->filetype = $filetype;
+
     // TODO use Core Smarty
     require_once 'Smarty/Smarty.class.php';
     $this->smarty = new Smarty();
@@ -53,10 +55,12 @@ class CRM_Core_CodeGen_Util_Template {
    * @param string $outpath full path to the desired output file
    */
   function runConcat($inputs, $outpath) {
-    unlink($outpath);
+    if (file_exists($outpath)) {
+      unlink($outpath);
+    }
     foreach ($inputs as $infile) {
       // FIXME: does not beautify.  Document.
-      file_put_contents($outpath, $this->smarty->fetch($infile), FILE_APPEND);
+      file_put_contents($outpath, $this->smarty->fetch($infile) ."\n", FILE_APPEND);
     }
   }
 

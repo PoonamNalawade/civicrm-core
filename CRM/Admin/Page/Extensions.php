@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -29,7 +29,7 @@
  * This is a part of CiviCRM extension management functionality.
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -97,7 +97,6 @@ class CRM_Admin_Page_Extensions extends CRM_Core_Page_Basic {
           'name' => ts('Disable'),
           'url' => 'civicrm/admin/extensions',
           'qs' => 'action=disable&id=%%id%%&key=%%key%%',
-          'ref' => 'disable-action',
           'title' => ts('Disable'),
         ),
         CRM_Core_Action::DELETE => array(

@@ -24,6 +24,7 @@
       <type>varchar</type>
       <length>255</length>
       <required>true</required>
+      <localizable>true</localizable>
       <comment>Title of the Survey.</comment>
       <import>true</import>
       <add>3.3</add>
@@ -34,6 +35,11 @@
     <type>int unsigned</type>
     <default>NULL</default>
     <comment>Foreign key to the Campaign.</comment>
+    <pseudoconstant>
+      <table>civicrm_campaign</table>
+      <keyColumn>id</keyColumn>
+      <labelColumn>title</labelColumn>
+    </pseudoconstant>
     <add>3.3</add>
   </field>
   <foreignKey>
@@ -80,6 +86,7 @@
   <field>
     <name>instructions</name>
     <type>text</type>
+    <localizable>true</localizable>
     <comment>Script instructions for volunteers to use for the survey.</comment>
     <html>
       <type>TextArea</type>

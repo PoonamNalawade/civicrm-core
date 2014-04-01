@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -116,7 +116,9 @@ class CRM_Mailing_Event_BAO_Reply extends CRM_Mailing_Event_DAO_Reply {
 
     $eq = new CRM_Core_DAO();
     $eq->query("SELECT     $contacts.display_name as display_name,
-                               $emails.email as email
+                           $emails.email as email,
+                           $queue.job_id as job_id,
+                           $queue.hash as hash
                    FROM        $queue
                    INNER JOIN  $contacts
                            ON  $queue.contact_id = $contacts.id
@@ -144,7 +146,9 @@ class CRM_Mailing_Event_BAO_Reply extends CRM_Mailing_Event_DAO_Reply {
       $b = $parsed->generateBody();
 
       // strip Return-Path of possible bounding brackets, CRM-4502
-      $h['Return-Path'] = trim($h['Return-Path'], '<>');
+      if (!empty($h['Return-Path'])) {
+        $h['Return-Path'] = trim($h['Return-Path'], '<>');
+      }
 
       // FIXME: ugly hack - find the first MIME boundary in
       // the body and make the boundary in the header match it
@@ -188,9 +192,9 @@ class CRM_Mailing_Event_BAO_Reply extends CRM_Mailing_Event_DAO_Reply {
     $mailer = $config->getMailer();
 
     if (is_object($mailer)) {
-      CRM_Core_Error::ignoreException();
+      $errorScope = CRM_Core_TemporaryErrorScope::ignoreException();
       $mailer->send($mailing->replyto_email, $h, $b);
-      CRM_Core_Error::setCallback();
+      unset($errorScope);
     }
   }
 
@@ -215,9 +219,9 @@ class CRM_Mailing_Event_BAO_Reply extends CRM_Mailing_Event_DAO_Reply {
     $eq = new CRM_Core_DAO();
     $eq->query(
       "SELECT     $contacts.preferred_mail_format as format,
-                    $email.email as email
-                    $queue.job_id as job_id
-                    $queue.hash as hash
+                  $email.email as email,
+                  $queue.job_id as job_id,
+                  $queue.hash as hash
         FROM        $contacts
         INNER JOIN  $queue ON $queue.contact_id = $contacts.id
         INNER JOIN  $email ON $queue.email_id = $email.id
@@ -278,9 +282,9 @@ class CRM_Mailing_Event_BAO_Reply extends CRM_Mailing_Event_DAO_Reply {
 
     $mailer = $config->getMailer();
     if (is_object($mailer)) {
-      CRM_Core_Error::ignoreException();
+      $errorScope = CRM_Core_TemporaryErrorScope::ignoreException();
       $mailer->send($to, $h, $b);
-      CRM_Core_Error::setCallback();
+      unset($errorScope);
     }
   }
 

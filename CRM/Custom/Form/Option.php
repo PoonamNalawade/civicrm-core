@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -125,7 +125,7 @@ class CRM_Custom_Form_Option extends CRM_Core_Form {
         || $fieldDefaults['html_type'] == 'Multi-Select'
         || $fieldDefaults['html_type'] == 'AdvMulti-Select'
       ) {
-        if (CRM_Utils_Array::value('default_value', $fieldDefaults)) {
+        if (!empty($fieldDefaults['default_value'])) {
           $defaultCheckValues = explode(CRM_Core_DAO::VALUE_SEPARATOR,
             substr($fieldDefaults['default_value'], 1, -1)
           );
@@ -452,7 +452,7 @@ SELECT count(*)
         CRM_Core_DAO::VALUE_SEPARATOR,
         substr($customField->default_value, 1, -1)
       );
-      if (CRM_Utils_Array::value('default_value', $params)) {
+      if (!empty($params['default_value'])) {
         if (!in_array($customOption->value, $defVal)) {
           if (empty($defVal[0])) {
             $defVal = array($customOption->value);
@@ -497,7 +497,7 @@ SELECT count(*)
           break;
       }
 
-      if (CRM_Utils_Array::value('default_value', $params)) {
+      if (!empty($params['default_value'])) {
         $customField->default_value = $customOption->value;
         $customField->save();
       }

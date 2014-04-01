@@ -1,8 +1,8 @@
 {*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -100,10 +100,10 @@
 
 {literal}
 <script type="text/javascript">
-    cj( function( ) {
-			var mailSetting = cj("input[name='outBound_option']:checked").val( );
+    CRM.$(function($) {
+      var mailSetting = cj("input[name='outBound_option']:checked").val( );
 
-			var archiveWarning = "{/literal}{ts escape='js'}WARNING: You are switching from a testing mode (Redirect to Database) to a live mode. Check Mailings > Archived Mailings, and delete any test mailings that are not in Completed status prior to running the mailing cron job for the first time. This will ensure that test mailings are not actually sent out.{/ts}{literal}"
+      var archiveWarning = "{/literal}{ts escape='js'}WARNING: You are switching from a testing mode (Redirect to Database) to a live mode. Check Mailings > Archived Mailings, and delete any test mailings that are not in Completed status prior to running the mailing cron job for the first time. This will ensure that test mailings are not actually sent out.{/ts}{literal}"
 
         showHideMailOptions( cj("input[name='outBound_option']:checked").val( ) ) ;
 
@@ -113,24 +113,24 @@
                 cj("#bySMTP").show( );
                 cj("#bySendmail").hide( );
                 cj("#_qf_Smtp_refresh_test").show( );
-								if (mailSetting == '5') {
-									alert(archiveWarning);
-								}
+                if (mailSetting == '5') {
+                  alert(archiveWarning);
+                }
               break;
               case "1":
                 cj("#bySMTP").hide( );
                 cj("#bySendmail").show( );
                 cj("#_qf_Smtp_refresh_test").show( );
-								if (mailSetting == '5') {
-									alert(archiveWarning);
-								}
+                if (mailSetting == '5') {
+                  alert(archiveWarning);
+                }
               break;
               case "3":
                 cj('.mailoption').hide();
                 cj("#_qf_Smtp_refresh_test").show( );
-								if (mailSetting == '5') {
-									alert(archiveWarning);
-								}
+                if (mailSetting == '5') {
+                  alert(archiveWarning);
+                }
               break;
               default:
                 cj("#bySMTP").hide( );

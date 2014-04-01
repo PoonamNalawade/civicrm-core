@@ -1,8 +1,8 @@
 {*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -26,7 +26,7 @@
 {* tpl for building Individual related fields *}
 <script type="text/javascript">
 {literal}
-cj(function($) {
+CRM.$(function($) {
 {/literal}
   var cid=parseFloat("{$contactId}");//parseInt is octal by default
   var contactIndividual = "{crmURL p='civicrm/ajax/rest' q='entity=contact&action=get&json=1&contact_type=Individual&return=display_name,sort_name,email&rowCount=50' h=0}";
@@ -120,9 +120,8 @@ cj(function($) {
 
   <tr>
     <td colspan="2">
-      {$form.current_employer.label}&nbsp;{help id="id-current-employer" file="CRM/Contact/Form/Contact.hlp"}<br />
-      {$form.current_employer.html|crmAddClass:twenty}
-      <div id="employer_address" style="display:none;"></div>
+      {$form.employer_id.label}&nbsp;{help id="id-current-employer" file="CRM/Contact/Form/Contact.hlp"}<br />
+      {$form.employer_id.html}
     </td>
     <td>
       {$form.job_title.label}<br />
@@ -140,5 +139,3 @@ cj(function($) {
     </td>
   </tr>
 </table>
-
-{include file="CRM/Contact/Form/CurrentEmployer.tpl"}

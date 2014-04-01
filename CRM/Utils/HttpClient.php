@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -34,7 +34,7 @@
  * want to deal with that so late in the 4.3 dev cycle.
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -192,7 +192,9 @@ class CRM_Utils_HttpClient {
     curl_setopt($ch, CURLOPT_HEADER, FALSE);
     curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
     curl_setopt($ch, CURLOPT_VERBOSE, 0);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+    if ($this->isRedirectSupported()) {
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+    }
     if ($this->connectionTimeout !== NULL) {
       curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->connectionTimeout);
     }
@@ -201,6 +203,10 @@ class CRM_Utils_HttpClient {
     }
 
     return array($ch, $caConfig);
+  }
+
+  public function isRedirectSupported() {
+    return (ini_get('open_basedir') == '') && (ini_get('safe_mode') == 'Off' || ini_get('safe_mode') === FALSE);
   }
 
 }

@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -208,6 +208,7 @@ class CRM_Case_Selector_Search extends CRM_Core_Selector_Base {
           'url' => 'civicrm/contact/view/case',
           'qs' => 'reset=1&id=%%id%%&cid=%%cid%%&action=view&context=%%cxt%%&selectedChild=case' . $extraParams,
           'ref' => 'manage-case',
+          'class' => 'no-popup',
           'title' => ts('Manage Case'),
         ),
         CRM_Core_Action::DELETE => array(
@@ -222,6 +223,7 @@ class CRM_Case_Selector_Search extends CRM_Core_Selector_Base {
           'url' => 'civicrm/contact/view/case/editClient',
           'qs' => 'reset=1&action=update&id=%%id%%&cid=%%cid%%&context=%%cxt%%' . $extraParams,
           'ref' => 'reassign',
+          'class' => 'medium-popup',
           'title' => ts('Assign to Another Client'),
         ),
       );

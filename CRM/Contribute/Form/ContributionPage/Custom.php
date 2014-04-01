@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -46,7 +46,7 @@ class CRM_Contribute_Form_ContributionPage_Custom extends CRM_Contribute_Form_Co
    */
   public function buildQuickForm() {
 
-    // Register 'contact_1'
+    // Register 'contact_1' model
     $entities = array();
     $entities[] = array('entity_name' => 'contact_1', 'entity_type' => 'IndividualModel');
     $allowCoreTypes = array_merge(array('Contact', 'Individual'), CRM_Contact_BAO_ContactType::subTypes('Individual'));

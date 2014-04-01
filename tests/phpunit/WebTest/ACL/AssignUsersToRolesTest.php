@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -44,7 +44,7 @@ class WebTest_ACL_AssignUsersToRolesTest extends CiviSeleniumTestCase {
 
     $this->waitForText('crm-notification-container', "The Group '{$groupTitle}' has been saved.");
 
-    $this->openCiviPage("admin/options/acl_role", "group=acl_role&action=add&reset=1", "_qf_Options_cancel-bottom");
+    $this->openCiviPage("admin/options/acl_role", "action=add&reset=1", "_qf_Options_cancel-bottom");
 
     $label = "TestAclRole" . substr(sha1(rand()), 0, 4);
     $this->type("label", $label);

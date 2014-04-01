@@ -56,6 +56,7 @@
   </foreignKey>
   <field>
     <name>financial_type_id</name>
+    <title>Financial Type</title>
     <type>int unsigned</type>
     <comment>default financial type assigned to contributions submitted via this page, e.g. Contribution, Campaign Contribution</comment>
     <pseudoconstant>
@@ -347,34 +348,6 @@
     <add>1.5</add>
   </field>
   <field>
-    <name>honor_block_is_active</name>
-    <type>boolean</type>
-    <comment>Should this contribution have the honor  block enabled?</comment>
-    <add>1.6</add>
-  </field>
-  <field>
-    <name>honor_block_title</name>
-    <title>Contribution Page Honor Block Title</title>
-    <type>varchar</type>
-    <length>255</length>
-    <localizable>true</localizable>
-    <comment>Title for honor block.</comment>
-    <add>1.5</add>
-  </field>
-  <field>
-    <name>honor_block_text</name>
-    <title>Contribution Page Honor Block Text</title>
-    <type>text</type>
-    <html>
-      <type>TextArea</type>
-      <rows>2</rows>
-      <cols>50</cols>
-    </html>
-    <localizable>true</localizable>
-    <comment>text for honor block.</comment>
-    <add>1.5</add>
-  </field>
-  <field>
     <name>start_date</name>
     <type>datetime</type>
     <title>Contribution Page Start Date</title>
@@ -434,6 +407,11 @@
     <title>Contribution Page Campaign ID</title>
     <type>int unsigned</type>
     <comment>The campaign for which we are collecting contributions with this page.</comment>
+    <pseudoconstant>
+      <table>civicrm_campaign</table>
+      <keyColumn>id</keyColumn>
+      <labelColumn>title</labelColumn>
+    </pseudoconstant>
     <add>3.4</add>
   </field>
   <foreignKey>

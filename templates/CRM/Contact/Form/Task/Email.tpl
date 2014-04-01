@@ -1,8 +1,8 @@
 {*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -57,14 +57,10 @@
 {/if}
     <tr class="crm-contactEmail-form-block-subject">
        <td class="label">{$form.subject.label}</td>
-       <td>{$form.subject.html|crmAddClass:huge}&nbsp;
-        <a href="#" onClick="return showToken('Subject', 3);">{$form.token3.label}</a>
-      {help id="id-token-subject" file="CRM/Contact/Form/Task/Email.hlp"}
-        <div id='tokenSubject' style="display:none">
-        <input style="border:1px solid #999999;" type="text" id="filter3" size="20" name="filter3" onkeyup="filter(this, 3)"/><br />
-        <span class="description">{ts}Begin typing to filter list of tokens{/ts}</span><br/>
-        {$form.token3.html}
-        </div>
+       <td>
+         {$form.subject.html|crmAddClass:huge}&nbsp;
+         <input class="crm-token-selector big" data-field="subject" />
+         {help id="id-token-subject" tplFile=$tplFile isAdmin=$isAdmin file="CRM/Contact/Form/Task/Email.hlp"}
        </td>
     </tr>
 </table>

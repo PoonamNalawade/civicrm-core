@@ -3,7 +3,6 @@ require_once 'CiviTest/CiviUnitTestCase.php';
 require_once 'CiviTest/Contact.php';
 require_once 'CiviTest/Custom.php';
 class CRM_Contact_BAO_ContactTest extends CiviUnitTestCase {
-  public $_eNoticeCompliant = FALSE;
   function get_info() {
     return array(
       'name' => 'Contact BAOs',
@@ -547,7 +546,7 @@ class CRM_Contact_BAO_ContactTest extends CiviUnitTestCase {
     //take the common contact params
     $params = $this->contactParams();
     $params['note'] = 'test note';
-    $params['create_employer'] = 'Yahoo';
+    $params['create_employer'] = 1;
 
     //create the contact with given params.
     $contact = CRM_Contact_BAO_Contact::create($params);
@@ -616,7 +615,7 @@ class CRM_Contact_BAO_ContactTest extends CiviUnitTestCase {
     $this->assertEquals(1, $values['relationship']['totalCount'], 'Check for total relationship count');
     foreach ($values['relationship']['data'] as $key => $val) {
       //Now check values of Relationship organization.
-      $this->assertEquals($params['create_employer'], $val['name'], 'Check for organization');
+      $this->assertEquals($params['create_employer'], $val['id'], 'Check for organization');
       //Now check values of Relationship type.
       $this->assertEquals('Employee of', $val['relation'], 'Check for relationship type');
       //delete the organization.
@@ -1522,26 +1521,23 @@ class CRM_Contact_BAO_ContactTest extends CiviUnitTestCase {
     $customGroup = Custom::createGroup(array(), 'Individual');
     $this->assertNotNull($customGroup);
     $fields = array(
-      'groupId' => $customGroup->id,
+      'custom_group_id' => $customGroup->id,
       'data_type' => 'String',
       'html_type' => 'Text',
     );
-    $customField = Custom::createField(array(), $fields);
-    $this->assertNotNull($customField);
-
+    $customField = $this->customFieldCreate($fields);
+    $customField = $customField['values'][$customField['id']];
     $test = $this;
     $this->_testTimestamps(array(
       'INSERT' => function ($contactId) use ($test, $customGroup, $customField) {
-        $result = civicrm_api('contact', 'create', array(
-          'version' => 3,
+        $result = civicrm_api3('contact', 'create', array(
           'contact_id' => $contactId,
-          'custom_' . $customField->id => 'test-1',
+          'custom_' . $customField['id'] => 'test-1',
         ));
-        $test->assertAPISuccess($result);
       },
       'UPDATE' => function ($contactId) use ($test, $customGroup, $customField) {
         CRM_Core_DAO::executeQuery(
-          "UPDATE {$customGroup->table_name} SET {$customField->column_name} = 'test-2' WHERE entity_id = %1",
+          "UPDATE {$customGroup->table_name} SET {$customField['column_name']} = 'test-2' WHERE entity_id = %1",
           array(1 => array($contactId, 'Integer'))
         );
       },

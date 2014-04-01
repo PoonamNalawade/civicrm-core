@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -29,7 +29,7 @@
  * Redefine the display action.
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -157,9 +157,10 @@ class CRM_Core_QuickForm_Action_Display extends CRM_Core_QuickForm_Action {
     }
 
     if ($controller->_QFResponseType == 'json') {
-      $response = array(
-        'content' => $html,
-      );
+      $response = array('content' => $html);
+      if (!empty($page->ajaxResponse)) {
+        $response += $page->ajaxResponse;
+      }
       if (!empty($form['errors'])) {
         $response['status'] = 'form_error';
         $response['errors'] = $form['errors'];

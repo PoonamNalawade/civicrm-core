@@ -2,9 +2,9 @@
 
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -30,7 +30,7 @@
  *
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -411,12 +411,7 @@ SELECT label, value
                 );
               }
               else {
-                if ($field['html_type'] == 'Autocomplete-Select') {
-                  $wildcard = FALSE;
-                  $val = array_search($value, $this->_options[$field['id']]);
-                }
-                elseif (in_array($field['html_type'], array(
-                  'Select', 'Radio'))) {
+                if (in_array($field['html_type'], array('Select', 'Radio', 'Autocomplete-Select'))) {
                   $wildcard = FALSE;
                   $val = CRM_Utils_Type::escape($value, 'String');
                 }

@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -222,9 +222,7 @@ END AS 'relType'
 
       $this->assign('has_related', FALSE);
       // if membership can be granted, and we are the owner of the membership
-      if (CRM_Utils_Array::value('relationship_type_id', $membershipType)
-        && !CRM_Utils_Array::value('owner_membership_id', $values)
-      ) {
+      if (!empty($membershipType['relationship_type_id']) && empty($values['owner_membership_id'])) {
         // display related contacts/membership block
         $this->assign('has_related', TRUE);
         $this->assign('max_related', CRM_Utils_Array::value('max_related', $values, ts('Unlimited')));
@@ -375,7 +373,7 @@ SELECT r.id, c.id as cid, c.display_name as name, c.job_title as comment,
       $autoRenew = $isRecur ? TRUE : FALSE;
     }
 
-    if (CRM_Utils_Array::value('is_test', $values)) {
+    if (!empty($values['is_test'])) {
       $values['membership_type'] .= ' (test) ';
     }
 
@@ -394,7 +392,7 @@ SELECT r.id, c.id as cid, c.display_name as name, c.job_title as comment,
   /**
    * Function to build the form
    *
-   * @return None
+   * @return void
    * @access public
    */
   public function buildQuickForm() {

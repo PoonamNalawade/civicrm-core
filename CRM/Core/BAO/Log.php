@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -176,8 +176,8 @@ UPDATE civicrm_log
       CRM_Report_BAO_ReportInstance::retrieve($params, $instance);
 
       if (!empty($instance) &&
-        (!CRM_Utils_Array::value('permission', $instance) ||
-          (CRM_Utils_Array::value('permission', $instance) && CRM_Core_Permission::check($instance['permission']))
+        (empty($instance['permission']) ||
+          (!empty($instance['permission']) && CRM_Core_Permission::check($instance['permission']))
         )
       ) {
         return $instance['id'];

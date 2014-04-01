@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -364,22 +364,21 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
 
   /**
    */
-  function webtestFillAutocomplete($sortName, $fieldName = 'contact_1') {
-    $this->click($fieldName);
-    $this->type($fieldName, $sortName);
-    $this->typeKeys($fieldName, $sortName);
-    $this->waitForElementPresent("css=div.ac_results-inner li");
-    $this->click("css=div.ac_results-inner li");
-    $this->assertContains($sortName, $this->getValue($fieldName), "autocomplete expected $sortName but didn’t find it in " . $this->getValue($fieldName));
+  function webtestFillAutocomplete($sortName, $fieldName = 'contact_id') {
+    $this->select2($fieldName,$sortName);
+    //$this->assertContains($sortName, $this->getValue($fieldName), "autocomplete expected $sortName but didn’t find it in " . $this->getValue($fieldName));
   }
 
   /**
    */
   function webtestOrganisationAutocomplete($sortName) {
-    $this->type('contact_name', $sortName);
-    $this->click('contact_name');
-    $this->waitForElementPresent("css=div.ac_results-inner li");
-    $this->click("css=div.ac_results-inner li");
+    $this->clickAt("//*[@id='contact_id']/../div/a");
+    $this->waitForElementPresent("//*[@id='select2-drop']/div/input");
+    $this->keyDown("//*[@id='select2-drop']/div/input", " ");
+    $this->type("//*[@id='select2-drop']/div/input", $sortName);
+    $this->typeKeys("//*[@id='select2-drop']/div/input", $sortName);
+    $this->waitForElementPresent("//*[@class='select2-result-label']");
+    $this->clickAt("//*[@class='select2-results']/li[1]");
     //$this->assertContains($sortName, $this->getValue('contact_1'), "autocomplete expected $sortName but didn’t find it in " . $this->getValue('contact_1'));
   }
 
@@ -486,10 +485,10 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
     foreach ($options as $oIndex => $oValue) {
       $validateStrings[] = $oValue['label'];
       $validateStrings[] = $oValue['amount'];
-      if (CRM_Utils_Array::value('membership_type_id', $oValue)) {
+      if (!empty($oValue['membership_type_id'])) {
         $this->select("membership_type_id_{$oIndex}", "value={$oValue['membership_type_id']}");
       }
-      if (CRM_Utils_Array::value('financial_type_id', $oValue)) {
+      if (!empty($oValue['financial_type_id'])) {
         $this->select("option_financial_type_id_{$oIndex}", "label={$oValue['financial_type_id']}");
       }
       $this->type("option_label_{$oIndex}", $oValue['label']);
@@ -501,19 +500,14 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
   /**
    */
   function webtestNewDialogContact($fname = 'Anthony', $lname = 'Anderson', $email = 'anthony@anderson.biz',
-                                   $type = 4, $selectId = 'profiles_1', $row = 1, $prefix = '') {
+                                   $type = 4, $selectId = 's2id_contact_id', $row = 1, $prefix = '') {
     // 4 - Individual profile
     // 5 - Organization profile
     // 6 - Household profile
-    $this->select($selectId, "value={$type}");
+    $profile = array('4' => 'New Individual', '5' => 'New Organisation', '6' => 'New Household');
+    $this->clickAt("xpath=//div[@id='$selectId']/a");
+    $this->click("xpath=//li[@class='select2-no-results']//a[contains(text(),' $profile[$type]')]");
 
-    // create new contact using dialog
-    if (!$prefix) {
-      $this->waitForElementPresent("css=div#contact-dialog-{$row}");
-    }
-    else {
-      $this->waitForElementPresent("css=div#contact-dialog-{$prefix}_{$row}");
-    }
     $this->waitForElementPresent('_qf_Edit_next');
 
     switch ($type) {
@@ -536,10 +530,10 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
 
     // Is new contact created?
     if ($lname) {
-      $this->assertTrue($this->isTextPresent("$fname $lname has been created."), "Status message didn't show up after saving!");
+      $this->waitForText("xpath=//div[@id='$selectId']","$lname, $fname");
     }
     else {
-      $this->assertTrue($this->isTextPresent("$fname has been created."), "Status message didn't show up after saving!");
+      $this->waitForText("xpath=//div[@id='$selectId']","$fname");
     }
   }
 
@@ -874,6 +868,7 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
       $this->click('honor_block_is_active');
       $this->type('honor_block_title', "Honoree Section Title $hash");
       $this->type('honor_block_text', "Honoree Introductory Message $hash");
+      $this->select('crmasmSelect0', "label=Household");
     }
 
     // is confirm enabled? it starts out enabled, so uncheck it if false
@@ -1030,11 +1025,11 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
       $this->waitForElementPresent('_qf_Custom_next-bottom');
 
       if ($profilePreId) {
-        $this->select('custom_pre_id', "value={$profilePreId}");
+        $this->select('css=tr.crm-contribution-contributionpage-custom-form-block-custom_pre_id span.crm-profile-selector-select select', "value={$profilePreId}");
       }
 
       if ($profilePostId) {
-        $this->select('custom_post_id', "value={$profilePostId}");
+        $this->select('css=tr.crm-contribution-contributionpage-custom-form-block-custom_post_id span.crm-profile-selector-select select', "value={$profilePostId}");
       }
 
       $this->click('_qf_Custom_next-bottom');
@@ -1171,7 +1166,7 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
     $this->waitForPageToLoad($this->getTimeoutMsec());
   }
 
-  function webtestAddMembershipType($period_type = 'rolling', $duration_interval = 1, $duration_unit = 'year', $auto_renew = 'no') {
+  function webtestAddMembershipType($period_type = 'Rolling', $duration_interval = 1, $duration_unit = 'year', $auto_renew = 'no') {
     $membershipTitle = substr(sha1(rand()), 0, 7);
     $membershipOrg = $membershipTitle . ' memorg';
     $this->webtestAddOrganization($membershipOrg, TRUE);
@@ -1207,10 +1202,7 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
         break;
     }
 
-    $this->type('member_of_contact', $membershipTitle);
-    $this->click('member_of_contact');
-    $this->waitForElementPresent("css=div.ac_results-inner li");
-    $this->click("css=div.ac_results-inner li");
+    $this->select2('member_of_contact_id',$membershipTitle);
 
     $this->type('minimum_fee', '100');
     $this->select('financial_type_id', "value={$memTypeParams['financial_type']}");
@@ -1654,7 +1646,7 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
     else {
       $this->click("xpath=id('ltype')/div/table/tbody/tr/td[1][text()='$financialType[oldname]']/../td[7]/span/a[text()='Edit']");
     }
-    $this->waitForPageToLoad($this->getTimeoutMsec());
+    $this->waitForElementPresent("name");
     $this->type('name', $financialType['name']);
     if ($option == 'new') {
       $this->type('description', $financialType['name'] . ' description');
@@ -1746,7 +1738,7 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
   }
 
   function addPaymentInstrument($label, $financialAccount) {
-    $this->openCiviPage('admin/options/payment_instrument', 'group=payment_instrument&action=add&reset=1', "_qf_Options_next-bottom");
+    $this->openCiviPage('admin/options/payment_instrument', 'action=add&reset=1', "_qf_Options_next-bottom");
     $this->type("label", $label);
     $this->select("financial_account_id", "value=$financialAccount");
     $this->click("_qf_Options_next-bottom");
@@ -1828,15 +1820,10 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
           }
         }
 
-        //sleep method is used as to wait for custom field div to load -
-        //we cant use wait for the div element as we are asserting for the same,
-        //so wait for some time till the div loads
-        sleep(1);
-
         //checking for proper custom data which is loading through ajax
-        $this->assertElementPresent("xpath=//div[@id='{$customData['cgtitle']}'][@class='crm-accordion-body']",
+        $this->waitForElementPresent("xpath=//div[contains(@class, 'custom-group-{$customData['cgtitle']}')]",
           "The on the fly custom group has not been rendered for entity : {$entity} => {$entityData}");
-        $this->assertElementPresent("xpath=//div[@id='{$customData['cgtitle']}'][@class='crm-accordion-body']/table/tbody/tr/td[2]/input",
+        $this->assertElementPresent("xpath=//div[contains(@class, 'custom-group-{$customData['cgtitle']}')]/[contains(@class, 'crm-accordion-body')]/table/tbody/tr/td[2]/input",
           "The on the fly custom group field is not present for entity : {$entity} => {$entityData}");
       }
     }
@@ -1879,5 +1866,18 @@ class CiviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase {
         "{$customSet['entity']}_{$customSet['subEntity']}" => array('cgtitle' => $customGroupTitle, 'gid' => $gid, 'triggerElement' => $customSet['triggerElement']));
     }
     return $return;
+  }
+
+  /**
+   * function to type and select first occurance of autocomplete
+   */
+  function select2($fieldName,$label) {
+    $this->clickAt("//*[@id='$fieldName']/../div/a");
+    $this->waitForElementPresent("//*[@id='select2-drop']/div/input");
+    $this->keyDown("//*[@id='select2-drop']/div/input", " ");
+    $this->type("//*[@id='select2-drop']/div/input", $label);
+    $this->typeKeys("//*[@id='select2-drop']/div/input", $label);
+    $this->waitForElementPresent("//*[@class='select2-result-label']");
+    $this->clickAt("//*[@class='select2-results']/li[1]");
   }
 }

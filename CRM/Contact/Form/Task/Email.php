@@ -1,9 +1,9 @@
 <?php
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -28,7 +28,7 @@
 /**
  *
  * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
+ * @copyright CiviCRM LLC (c) 2004-2014
  * $Id$
  *
  */
@@ -97,14 +97,16 @@ class CRM_Contact_Form_Task_Email extends CRM_Contact_Form_Task {
    *
    * @return void
    * @access public
-   */ function preProcess() {
+   */
+  function preProcess() {
     // store case id if present
     $this->_caseId = CRM_Utils_Request::retrieve('caseid', 'Positive', $this, FALSE);
     $this->_context = CRM_Utils_Request::retrieve('context', 'String', $this);
 
     $cid = CRM_Utils_Request::retrieve('cid', 'Positive', $this, FALSE);
     if ($cid) {
-      CRM_Contact_Page_View::setTitle($cid);
+      $displayName = CRM_Contact_BAO_Contact::displayName($cid);
+      CRM_Utils_System::setTitle($displayName . ' - ' . ts('Email'));
     }
 
     CRM_Contact_Form_Task_EmailCommon::preProcessFromAddress($this);
@@ -144,7 +146,7 @@ class CRM_Contact_Form_Task_Email extends CRM_Contact_Form_Task {
    *
    * @access public
    *
-   * @return None
+   * @return void
    */
   public function postProcess() {
     CRM_Contact_Form_Task_EmailCommon::postProcess($this);

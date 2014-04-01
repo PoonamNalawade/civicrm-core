@@ -1,8 +1,8 @@
 {*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.4                                                |
+ | CiviCRM version 4.5                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2013                                |
+ | Copyright CiviCRM LLC (c) 2004-2014                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -34,7 +34,7 @@
 </table> 
 <p></p>
 
-<table class="selector">
+<table class="selector row-highlight">
     <tr class="columnheader">
         <th scope="col">{ts}Contributor{/ts}</th> 
         <th scope="col">{ts}Amount{/ts}</th>
